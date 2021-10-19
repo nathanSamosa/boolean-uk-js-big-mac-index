@@ -1,31 +1,68 @@
-var currencyArr = [
-    ['United States', 5.66, 1, '$'],
-    ['United Kingdom', 3.19, 1.37, '£'],
-    ['China', 21.71, 0.16, '¥'],
-    ['Australia', 6.48, 0.74, 'AU$'],
-];
+/* OBJECTS */
+const unitedStates = {
+    name: 'United States',
+    price: 5.66,
+    exchange: 1,
+    currency: '$'
+};
 
-document.getElementById("US_price").innerHTML = currencyArr[0][3] + currencyArr[0][1];
+const unitedKingdom = {
+    name: 'United Kingdom',
+    price: 3.19,
+    exchange: 1.37,
+    currency: '£'
+};
 
-var str = ''
+const china = {
+    name: 'China',
+    price: 21.71,
+    exchange: 0.16,
+    currency: '¥'
+};
+
+const australia = {
+    name: 'Australia',
+    price: 6.48,
+    exchange: 0.74,
+    currency: 'AU$'
+};
+
+/* ARRAYS */
+var countryArr = [unitedStates, unitedKingdom, china, australia];
+var currencyArr = [];
 var indexArr = [];
-for (var i = 1; i < currencyArr.length; i++) {
 
-    var percentage = ((currencyArr[i][2] - (currencyArr[0][1]/currencyArr[i][1]))/(currencyArr[0][1]/currencyArr[i][1]))*100;
-    var index = Math.round(percentage) + "%";
-    indexArr.push(index);
-    console.log('%c' + currencyArr[i][0] + ':', 'color: yellow; font-weight: bold;');
-    console.log(index);
+/* VARIABLES */
+var str = "";
+var percentage;
+var bigMac;
 
-    str +=
-        '<h3>' + currencyArr[i][0] + ':</h3>' + 
-        '<ul>' + 
-            '<li>Price: ' + currencyArr[i][3] + currencyArr[i][1] + '</li>' + 
-            '<li>Index: ' + index + '</li>' + 
-        '</ul>';
-        
+/* CALCULATE BIG MAC INDEX */
+countryArr.forEach(function (object) {
+    percentage = ((object.exchange - (unitedStates.price/object.price))/(unitedStates.price/object.price))*100;
+    bigMac = Math.round(percentage) + "%";
+    object.bigMac = bigMac;
+    /* FORMAT PRICES WITH CURRENCIES */
+    object.priceNew = object.currency + object.price;
+});
+
+/* RECORD UNITED STATES AND REMOVE FROM ARRAYS */
+function removeControl() {
+    document.getElementById("US_price").innerHTML = unitedStates.priceNew;
+    currencyArr.shift();
+    countryArr.shift();
 }
+removeControl();
 
+/* DISPLAY COUNTRY INFO AS A LIST */
+countryArr.forEach(function (object) {
+    str +=
+    '<h3>' + object.name + ':</h3>' + 
+    '<ul>' + 
+        '<li>Price: ' + object.priceNew + '</li>' + 
+        '<li>Index: ' + object.bigMac + '</li>' + 
+    '</ul>';
+});
 document.getElementById("results").innerHTML = str;
-console.log('%cIndex array:', 'color: orange; font-weight: bold;');
-console.log(indexArr);
+
+console.log(countryArr)
